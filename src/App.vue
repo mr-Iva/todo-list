@@ -10,25 +10,21 @@
 
 <script>
 
-import MainPage from "./views/MainPage.vue";
+import MainPage from './views/MainPage.vue'
 
 export default {
 
-    components: {
+  components: {
 
-        "v-main-page": MainPage,
+    'v-main-page': MainPage
 
-    },
+  },
 
-    data() {
-
-        return {
-
-
-
-        }
+  data () {
+    return {
 
     }
+  }
 
 }
 

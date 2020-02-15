@@ -18,16 +18,14 @@
 
 export default {
 
-    data() {
+  data () {
+    return {
 
-        return {
-
-            userName: "Dima",
-            userIconUrl: ""
-
-        }
+      userName: 'Dima',
+      userIconUrl: ''
 
     }
+  }
 
 }
 

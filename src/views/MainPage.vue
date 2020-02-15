@@ -46,44 +46,50 @@
 
     <section class="add-item">
 
-        <button
+        <input
+         type="text"
+         placeholder="Add project"
          class="add-item__button"
-         @click="createProject"
-        >
-            Add project
-        </button>
-        <button
+         @keyup.enter="addNewProject"
+        />
+        <input
+         type="text"
+         placeholder="Add todo"
          class="add-item__button"
-         @click="addTodo"
-        >
-            Add todo
-        </button>
+         @keyup.enter="addNewTodo"
+        />
 
     </section>
 
     <ul class="items-list">
 
-        <!-- make drag event to move li -->
         <!-- make special directive to detect whether an element is todo or group and give it v-show or v-if -->
 
         <li
-         v-for="project in itemsArr"
-         class="items-list__item"
+         v-for="(item, index) in itemsArr"
+         :key="index"
+         :class="`items-list__item item-${item.id}`"
         >
 
-            <button
-             class="items-list__item__button items-list__item__button--show"
-             @click="project.showContent = !project.showContent"
-            ></button>
+          <div class="items-list__item-controls">
+              <button
+                class="items-list__item-controls__button items-list__item-controls__button--show"
+                @click="item.showContent = !item.showContent"
+              ></button>
 
-            <h3 class="items-list__item__name">{{ project.title }}</h3>
+              <h3 class="items-list__item-controls__name">{{ item.title }}</h3>
 
-            <button
-             class="items-list__item__button items-list__item__button--delete"
-             @click="deleteItem(project)"
-            ></button>
+              <button
+                class="items-list__item-controls__button items-list__item-controls__button--delete"
+                @click="itemsArr.splice(itemsArr.indexOf(item), 1)"
+              ></button>
+          </div>
 
-            <v-text-area v-if="project.showContent" />
+          <v-text-area
+           v-if="item.showContent"
+           :textContent="item.textContent"
+           @saveText="item.textContent = $event"
+          /> <!-- i need to decide to use v-if or v-show -->
 
         </li>
 
@@ -96,154 +102,133 @@
 <script>
 
 // later make it global or return to App.vue in absolute position
-import TheProfileSection from '../components/TheProfileSection.vue';
-import TextArea from '../components/TextArea.vue';
+import TheProfileSection from '../components/TheProfileSection.vue'
+import TextArea from '../components/TextArea.vue'
 
 export default {
-
-    components: {
-
-        "v-profile-section": TheProfileSection,
-        "v-text-area": TextArea
-
-    },
-
-    directives: {
-
-        focus: {
-
-            inserted(el) { el.focus() }
-
-        }
-
-    },
-
-    data() {
-
-        return {
-
-            pallet: ["#9AE87B", "#4ECFA4", "#40CFBE", "#C7504C", "#E6CFA1"],
-            groupFiltersArr: [],
-            itemsArr: [],
-            itemsGlobalId: 0,
-            createFilter: false
-
-        }
-
-    },
-
-    computed: {
-
-        addinFilterName() {
-
-            const cssClass = "groups-filters__add-item groups-filters__item--";
-            const modifier = this.createFilter ? "show" : "hidden";
-
-            return cssClass + modifier;
-
-        }
-
-    },
-
-    methods: {
-
-        randomColor() {
-
-            let random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
-
-            let hue = random(0, 360);
-            let lightnes = `${random(60, 80)}%`;
-            let saturation = `${random(60, 80)}%`;
-
-            for(let filter of this.groupFiltersArr) {
-
-                let hueCopy, difference;
-
-                hueCopy = /\d{1,3},/.exec(filter.color); // should be a better way to find needed hue value
-                hueCopy = hueCopy[0].replace(",", "");
-
-                difference = hue - hueCopy;
-
-                if(difference <= 15 && difference >= -15) return this.randomColor();
-
-            }
-
-            return `hsl(${hue}, ${lightnes}, ${saturation})`;
-
-        },
-
-        addNewFilter(event) {
-
-            this.groupFiltersArr.push({
-
-                name: event.target.value.trim(),
-                color: `background-color: ${this.randomColor()}`,
-                class: "groups-filters__item--active"
-
-            });
-
-            this.createFilter = false;
-
-            // https://ru.vuejs.org/v2/guide/list.html in the bottom of page there is usefull example how can make names for new gruops
-
-        },
-
-        toggleFilter(event) {
-
-            let className = event.target.className.replace(/--\w+/, match => (match === "--hidden") ? "--active" : "--hidden" );
-
-            event.target.className = className;
-
-        },
-
-        createProject() {
-
-
-
-        },
-
-        addNewProject(event) {
-
-            console.log(event.target.value);
-
-            this.itemsArr.push({
-
-                id: this.itemsGlobalId++,
-                type: "project",
-                title: "It is test project",
-                showContent: false
-
-            });
-
-        },
-
-        addTodo() {
-
-            this.itemsArr.push({
-
-                id: this.itemsGlobalId++,
-                type: "todo",
-                title: "Maybe test todo",
-                showContent: false
-
-            });
-
-        },
-
-        showItem(item) {
-
-            item.showContent = !item.showContent;
-
-        },
-
-        deleteItem(item) {
-
-            this.itemsArr.splice(this.itemsArr.indexOf(item), 1);
-
-        }
-
+  components: {
+    'v-profile-section': TheProfileSection,
+    'v-text-area': TextArea
+  },
+  directives: {
+    focus: {
+      inserted (el) { el.focus() }
     }
+  },
+  data () {
+    return {
+      pallet: ['#9AE87B', '#4ECFA4', '#40CFBE', '#C7504C', '#E6CFA1'],
+      groupFiltersArr: [],
+      itemsArr: [],
+      itemsGlobalId: 0,
+      createFilter: false,
+      draggedItem: null
+    }
+  },
+  computed: {
+    addinFilterName () {
+      const cssClass = 'groups-filters__add-item groups-filters__item--'
+      const modifier = this.createFilter ? 'show' : 'hidden'
 
+      return cssClass + modifier
+    }
+  },
+  mounted () {
+    document.addEventListener('dragstart', event => {
+      this.draggedItem = event.target
+
+      this.draggedItem.style.opacity = 0.5
+    })
+
+    document.addEventListener('dragover', event => { event.preventDefault() })
+    document.addEventListener('dragend', event => { this.draggedItem.style.opacity = 1 })
+
+    document.addEventListener('drop', event => {
+      const itemArr = document.getElementsByClassName('items-list__item')
+      let dropAfter = null
+
+      for (const item of itemArr) {
+        if (item === this.draggedItem) continue
+
+        if (event.clientY > item.offsetTop) {
+          dropAfter = item
+        } else {
+          dropAfter = item.previousSibling
+
+          break
+        }
+      }
+
+      if (dropAfter !== null) {
+        this.draggedItem.remove()
+
+        document.querySelector('.items-list').insertBefore(this.draggedItem, dropAfter.nextSibling)
+      }
+    })
+  },
+  methods: {
+    test (value) {
+      console.log(value)
+    },
+    randomColor () {
+      const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
+
+      const hue = random(0, 360)
+      const lightnes = `${random(60, 80)}%`
+      const saturation = `${random(60, 80)}%`
+
+      for (const filter of this.groupFiltersArr) {
+        let hueCopy = null
+
+        hueCopy = /\d{1,3},/.exec(filter.color) // should be a better way to find needed hue value
+        hueCopy = hueCopy[0].replace(',', '')
+
+        const difference = hue - hueCopy
+
+        if (difference <= 15 && difference >= -15) return this.randomColor()
+      }
+
+      return `hsl(${hue}, ${lightnes}, ${saturation})`
+    },
+    addNewFilter (event) {
+      this.groupFiltersArr.push({
+        name: event.target.value.trim(),
+        color: `background-color: ${this.randomColor()}`,
+        class: 'groups-filters__item--active'
+      })
+
+      this.createFilter = false
+
+      // https://ru.vuejs.org/v2/guide/list.html in the bottom of page there is usefull example how can make names for new gruops
+    },
+    toggleFilter (event) {
+      const className = event.target.className.replace(/--\w+/, match => (match === '--hidden') ? '--active' : '--hidden')
+
+      event.target.className = className
+    },
+    addNewProject (event) {
+      this.itemsArr.push({
+        id: this.itemsGlobalId++,
+        type: 'project',
+        title: event.target.value,
+        showContent: false
+      })
+
+      event.target.value = ''
+    },
+
+    addNewTodo (event) {
+      this.itemsArr.push({
+        id: this.itemsGlobalId++,
+        type: 'todo',
+        title: event.target.value,
+        showContent: false,
+        textContent: ''
+      })
+
+      event.target.value = ''
+    }
+  }
 }
 
 </script>
@@ -356,29 +341,32 @@ export default {
 
 .items-list__item
 
-    height: 50px
     margin-bottom: 25px
+
+.items-list__item-controls
+
+    height: 50px
     background-color: #4ECFA4
 
-.items-list__item__name
+.items-list__item-controls__name
 
     display: inline-block
-    float: left
     margin-left: 25px
 
-.items-list__item__button
+.items-list__item-controls__button
 
     height: 50px
     width: 50px
+    display: inline-block
     // background-color: transparent // while I there is no icons for button this property isn't needed
     border: none
     cursor: pointer
 
-.items-list__item__button--show
+.items-list__item-controls__button--show
 
     float: left
 
-.items-list__item__button--delete
+.items-list__item-controls__button--delete
 
     float: right
 
