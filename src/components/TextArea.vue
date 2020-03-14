@@ -1,46 +1,46 @@
 <template>
 
-    <article class="text-area">
-        <section class="text-area__text-formating">
-            <v-textButtonNoCustom
-             v-for="(textModifier, index) in noCustomTextModifierArray"
-             :key="`noCustom${index}`"
-             :buttonAttributes="textModifier[1]"
-             @buttonToggled="addActiveButton(...$event)"
-             @alignButton="alignBtn"
-            />
-            <v-textButtonCustomColor
-             v-for="(textModifier, index) in customColorTextModifierArray"
-             :key="`customColor${index}`"
-             :buttonAttributes="textModifier[1]"
-             @buttonToggled="addActiveButton(...$event)"
-            />
-            <v-textButtonCustomInput
-             v-for="(textModifier, index) in customInputTextModifierArray"
-             :key="`customInput${index}`"
-             :buttonAttributes="textModifier[1]"
-             @buttonToggled="addActiveButton(...$event)"
-            />
-            <v-textButtonRemoveFormat />
-            <v-textButtonInsertImage />
-            <!-- <v-textButtonFontSize
-             description="font size"
-             modifier="fontSize"
-             :enableToggleButton="true"
-             @buttonToggled="activeModifierArr.push($event)"
-            /> need to decide what to do with this -->
+  <article class="text-editor">
+    <section class="text-editor__text-formating">
+      <v-textButtonNoCustom
+       v-for="(textModifier, index) in noCustomTextModifierArray"
+       :key="`noCustom${index}`"
+       :buttonAttributes="textModifier[1]"
+       @buttonToggled="addActiveButton(...$event)"
+       @alignButton="alignBtn"
+      />
+      <v-textButtonCustomColor
+       v-for="(textModifier, index) in customColorTextModifierArray"
+       :key="`customColor${index}`"
+       :buttonAttributes="textModifier[1]"
+       @buttonToggled="addActiveButton(...$event)"
+      />
+      <v-textButtonCustomInput
+       v-for="(textModifier, index) in customInputTextModifierArray"
+       :key="`customInput${index}`"
+       :buttonAttributes="textModifier[1]"
+       @buttonToggled="addActiveButton(...$event)"
+      />
+      <v-textButtonRemoveFormat />
+      <v-textButtonInsertImage />
+      <!-- <v-textButtonFontSize
+        description="font size"
+        modifier="fontSize"
+        :enableToggleButton="true"
+        @buttonToggled="activeModifierArr.push($event)"
+      /> need to decide what to do with this -->
 
-        </section>
+    </section>
 
-        <div
-         contenteditable="true"
-         class="text-area__description"
-         @keyup="checkCaretAfterKey"
-         @click="checkCaret"
-         v-html="textContent"
-        ></div>
+    <div
+     contenteditable="true"
+     class="text-editor__text-area"
+     @keyup="checkCaretAfterKey"
+     @click="checkCaret"
+     v-html="textContent"
+    ></div>
 
-    </article>
+  </article>
 
 </template>
 
@@ -214,48 +214,38 @@ export default {
 
 <style lang="sass">
 
-.text-area
+.text-editor
+  box-sizing: border-box
+  height: 600px
+  background-color: grey
+  margin: 0 auto
 
-    box-sizing: border-box
-    height: 600px
-    background-color: grey
-    margin: 0 auto
-
-.text-area__text-formating
-
+  &__text-formating
     height: 10%
     background-color: red
 
-.text-area__description
+    &__button
+      background-color: white
 
+      &--active
+        background-color: grey
+
+  &__text-area
     width: 100%
     height: 90%
     background-color: black
     color: white
+  //   & h1, & h2, & h3, & h4, & h5, & h6
+  //     margin: 0
 
-.text-area__description blockquote
-
-    margin: 0 0 0 25px
-
-.text-area__description h1, .text-area__description h2, .text-area__description h3,
- .text-area__description h4, .text-area__description h5, .text-area__description h6
-
-    margin: 0
-
-.text-area__text-formating__button
-
-    background-color: white
-
-.text-area__text-formating__button.text-area__text-formating__button--active
-    background-color: grey
+  // &__description blockquote
+  //   margin: 0 0 0 25px
 
 .wrapper
+  display: inline-block
+  list-style: none
+  padding: 0
 
-    display: inline-block
-    list-style: none
-    padding: 0
-
-.wrapper__item-input
-
+  &__item-input
     position: absolute
 </style>

@@ -1,25 +1,25 @@
 <template>
 <ul class="wrapper">
-    <li>
-        <button
-         @click="toggleInput"
-         title="insert image"
-         class="text-area__text-formating__button"
-        >
-            insert image
-        </button>
-    </li>
-    <li
-     class="wrapper__item-input"
-     v-show="showInput"
+  <li>
+    <button
+     @click="toggleInput"
+     title="insert image"
+     class="text-area__text-formating__button"
     >
-        <input
-        type="text"
-        :class="`text-area__text-formating__insertImage-button`"
-        v-model="customInput"
-        >
-        <button @click="changeText('insertImage', customInput)">done</button>
-    </li>
+      insert image
+    </button>
+  </li>
+  <li
+   class="wrapper__item-input"
+   v-show="showInput"
+  >
+    <input
+     type="text"
+     :class="`text-area__text-formating__insertImage-button`"
+     v-model="customInput"
+    >
+    <button @click="changeText('insertImage', customInput)">done</button>
+  </li>
 </ul>
 </template>
 

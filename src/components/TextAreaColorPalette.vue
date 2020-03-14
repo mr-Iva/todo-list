@@ -1,19 +1,19 @@
 <template>
-<ul class="color-palette">
-    <li
-     v-for="(paletteLine, index) in colorArr"
-     :key="`paletteLine${index}`"
-     class='color-palette__color-line'
-    >
-        <div
-         v-for="(paletteColor, index) in paletteLine"
-         :key="`color${index}`"
-         @click="$emit('changeColor', paletteColor)"
-         class="color-palette__color-line__color-block"
-         :style="`background-color: ${paletteColor}`"
-        ></div>
-    </li>
-</ul>
+<section class="color-palette">
+  <div
+   v-for="(paletteLine, index) in colorArr"
+   :key="`paletteLine${index}`"
+   class='color-palette__line'
+  >
+    <div
+     v-for="(paletteColor, index) in paletteLine"
+     :key="`color${index}`"
+     @click="$emit('changeColor', paletteColor)"
+     :style="`background-color: ${paletteColor}`"
+     class="color-palette__color-block"
+    ></div>
+  </div>
+</section>
 </template>
 
 <script>
@@ -32,7 +32,6 @@ export default {
         ['#212121', '#940000', '#942100', '#844200', '#737300', '#528400', '#008400', '#008484', '#006394', '#0000a5', '#4a0094', '#940094', '#94004a'],
         ['#101010', '#730000', '#731800', '#633100', '#636300', '#396300', '#006300', '#006363', '#004a73', '#000084', '#390073', '#730073', '#730039'],
         ['#000000', '#520000', '#521000', '#522900', '#525200', '#315200', '#005200', '#005252', '#003152', '#000052', '#290052', '#520052', '#520029']
-
       ]
     }
   }
@@ -41,21 +40,15 @@ export default {
 
 <style lang="sass">
 .color-palette
+  padding: 0
+  margin: 0
+  width: 325px
+  height: 275px
 
-    list-style: none
-    padding: 0
-    margin: 0
-    width: 325px
-    height: 275px
-
-.color-palette__color-line
-
+  &__line
     height: 25px
-    padding:0
-    margin: 0
 
-.color-palette__color-line__color-block
-
+  &__color-block
     width: 15px
     height: 15px
     display: inline-block

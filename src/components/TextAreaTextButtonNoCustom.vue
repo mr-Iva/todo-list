@@ -10,19 +10,20 @@
 
 <script>
 import basicTextButton from '../mixins/TextAreaBasicTextButtonMixin.vue'
+import changeTextMixin from '../mixins/TextAreaTextModifierMixin.vue'
 
 export default {
-  mixins: [basicTextButton],
+  mixins: [basicTextButton, changeTextMixin],
   methods: {
-    changeText (command, customValue = null) {
-      const comm = this.offTag !== '' && this.buttonActive ? this.offTag : command
+    // changeText (command, customValue = null) {
+    //   const comm = this.offTag !== '' && this.buttonActive ? this.offTag : command
 
-      document.execCommand(comm, false, customValue)
+    //   document.execCommand(comm, false, customValue)
 
-      if (this.enableButtonToggle) this.toggleButton()
+    //   if (this.enableButtonToggle) this.toggleButton()
 
-      document.querySelector('.text-area__description').focus()
-    }
+    //   document.querySelector('.text-area__description').focus()
+    // }
   }
 }
 </script>

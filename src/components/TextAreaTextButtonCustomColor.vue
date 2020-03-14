@@ -39,9 +39,8 @@ export default {
 <style lang="sass">
 
 .text-area__text-formating__chosen-color
-
-    display: inline-block
-    width: 25px
-    height: 25px
-    border: 5px solid silver
+  display: inline-block
+  width: 25px
+  height: 25px
+  border: 5px solid silver
 </style>

@@ -2,30 +2,26 @@
 
 <div id="app">
 
-  <v-main-page/>
+  <v-main-header v-if="authorized"></v-main-header>
+
+  <router-view></router-view>
 
 </div>
 
 </template>
 
 <script>
-
-import MainPage from './views/MainPage.vue'
+import mainHeader from './components/MainHeader.vue'
 
 export default {
-
   components: {
-
-    'v-main-page': MainPage
-
+    'v-main-header': mainHeader
   },
-
   data () {
     return {
-
+      authorized: false
     }
   }
-
 }
 
 </script>
@@ -33,7 +29,6 @@ export default {
 <style lang="sass">
 
 body
-
-    margin: 0
+  margin: 0
 
 </style>
