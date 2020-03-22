@@ -2,7 +2,8 @@
 
 <div id="app">
 
-  <v-main-header v-if="authorized"></v-main-header>
+  <v-main-navigation v-if="isAuth"></v-main-navigation>
+  <v-main-filters v-if="isAuth"></v-main-filters>
 
   <router-view></router-view>
 
@@ -11,15 +12,36 @@
 </template>
 
 <script>
-import mainHeader from './components/MainHeader.vue'
+import { mapState } from 'vuex'
+import mainNavigation from './components/MainNavigation'
+import mainFilters from './components/MainFilters'
 
 export default {
   components: {
-    'v-main-header': mainHeader
+    'v-main-navigation': mainNavigation,
+    'v-main-filters': mainFilters
   },
   data () {
     return {
-      authorized: false
+      // isAuth: JSON.parse(localStorage.getItem('userData')).token
+    }
+  },
+  computed: mapState(['isAuth']),
+  watch: {
+    isAuth (val) {
+      console.log(val)
+      if (val) {
+        this.$router.push({ name: 'homePage' })
+      } else {
+        this.$router.push({ name: 'auth' })
+      }
+    }
+  },
+  mounted () {
+    if (this.isAuth) {
+      this.$router.push({ name: 'homePage' })
+    } else {
+      this.$router.push({ name: 'auth' })
     }
   }
 }
@@ -27,8 +49,9 @@ export default {
 </script>
 
 <style lang="sass">
+#app
+  background-color: #A8BBBF
 
 body
   margin: 0
-
 </style>

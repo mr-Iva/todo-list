@@ -217,12 +217,13 @@ export default {
 .text-editor
   box-sizing: border-box
   height: 600px
+  width: calc(100% - 100px)
   background-color: grey
   margin: 0 auto
 
   &__text-formating
     height: 10%
-    background-color: red
+    background-color: #262626
 
     &__button
       background-color: white
@@ -233,15 +234,15 @@ export default {
   &__text-area
     width: 100%
     height: 90%
-    background-color: black
-    color: white
+    background-color: #E9EEF2
+    color: #262626
   //   & h1, & h2, & h3, & h4, & h5, & h6
   //     margin: 0
 
   // &__description blockquote
   //   margin: 0 0 0 25px
 
-.wrapper
+.button-wrapper
   display: inline-block
   list-style: none
   padding: 0

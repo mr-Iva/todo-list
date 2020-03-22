@@ -1,5 +1,5 @@
 <template>
-<ul class="wrapper">
+<ul class="button-wrapper">
     <li>
         <button
          @click="toggleInput()"
@@ -10,7 +10,7 @@
         </button>
     </li>
     <li
-     class="wrapper__item-input"
+     class="button-wrapper__item-input"
      v-show="showInput"
     >
         <input

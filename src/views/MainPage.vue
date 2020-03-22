@@ -3,39 +3,47 @@
 <main class="main-page">
 
   <section class="add-item">
+    <button
+     class="add-item__button add-item__project"
+     v-show="creatingItem"
+     @click="addNewProject"
+    >
+      project +
+    </button>
     <input
      type="text"
-     placeholder="Add project"
-     class="add-item__button"
-     @keyup.enter="addNewProject"
+     class="add-item__input"
+     v-model="itemName"
+     @focus="creatingItem = true"
+     @blur="hideInput"
     />
-    <input
-     type="text"
-     placeholder="Add todo"
-     class="add-item__button"
-     @keyup.enter="addNewTodo"
-    />
+    <button
+     class="add-item__button add-item__todo"
+     v-show="creatingItem"
+     @click="addNewTodo"
+    >
+      todo +
+    </button>
   </section>
 
-  <ul class="items-list">
+  <section class="items-list">
 
-    <li
+    <div
      v-for="(item, index) in itemsArr"
      :key="index"
      :class="`items-list__item item-${item.id}`"
     >
-
-      <div class="items-list__item-controls">
+      <div class="item-wrapper">
         <button
-         class="items-list__item-controls__button items-list__item-controls__button--show"
-         @click="item.showContent = !item.showContent"
+          class="item__button item__button--show"
+          @click="item.showContent = !item.showContent"
         ></button>
 
-        <h3 class="items-list__item-controls__name">{{ item.title }}</h3>
+        <h3 class="item__name">{{ item.title }}</h3>
 
         <button
-         class="items-list__item-controls__button items-list__item-controls__button--delete"
-         @click="itemsArr.splice(itemsArr.indexOf(item), 1)"
+          class="item__button item__button--delete"
+          @click="itemsArr.splice(itemsArr.indexOf(item), 1)"
         ></button>
       </div>
 
@@ -45,9 +53,9 @@
        @saveText="item.textContent = $event"
       /> <!-- i need to decide to use v-if or v-show -->
 
-    </li>
+    </div>
 
-  </ul>
+  </section>
 
 </main>
 
@@ -56,14 +64,16 @@
 <script>
 
 // later make it global or return to App.vue in absolute position
-import TextArea from '../components/TextArea.vue'
+import textArea from '../components/TextArea.vue'
 
 export default {
   components: {
-    'v-text-area': TextArea
+    'v-text-area': textArea
   },
   data () {
     return {
+      creatingItem: false,
+      itemName: '',
       itemsArr: [],
       itemsGlobalId: 0,
       draggedItem: null
@@ -103,29 +113,35 @@ export default {
     })
   },
   methods: {
-    test (value) {
-      console.log(value)
+    hideInput (event) {
+      if (event.target.value.length === 0) {
+        this.creatingItem = false
+      }
     },
-    addNewProject (event) {
+    addNewProject () {
       this.itemsArr.push({
         id: this.itemsGlobalId++,
         type: 'project',
-        title: event.target.value,
+        title: this.itemName,
         showContent: false
       })
 
-      event.target.value = ''
+      this.itemName = ''
+
+      this.creatingItem = false
     },
     addNewTodo (event) {
       this.itemsArr.push({
         id: this.itemsGlobalId++,
         type: 'todo',
-        title: event.target.value,
+        title: this.itemName,
         showContent: false,
         textContent: ''
       })
 
-      event.target.value = ''
+      this.itemName = ''
+
+      this.creatingItem = false
     }
   }
 }
@@ -136,60 +152,61 @@ export default {
 .main-page
   height: 100vh
   width: 100vw
-  background-color: #E8E5DF
+  padding-top: 75px
+  display: flex
+  flex-direction: column
+  align-items: center
 
 .items-list
-  margin: 50px 100px
-  padding: 0
-  list-style: none
+  width: 80%
+  margin-top: 50px
 
   &__item
     margin-bottom: 25px
 
-  &__item-controls
-    height: 50px
-    background-color: #4ECFA4
+    & .item-wrapper
+      display: flex
+      justify-content: space-between
+      align-items: center
+      background-color: #595857
 
-    &__name
-      display: inline-block
-      margin-left: 25px
+    & .item
+      &__name
+        display: inline-block
+        color: #E9EEF2
+        margin: 0
 
-    &__button
-      height: 50px
-      width: 50px
-      display: inline-block
-      // background-color: transparent
-      // while I there is no icons for button this property isn't needed
-      border: none
-      cursor: pointer
+      &__button
+        height: 50px
+        width: 50px
+        display: inline-block
+        // background-color: transparent
+        // while I there is no icons for button this property isn't needed
+        border: none
+        cursor: pointer
 
-      &--show
-        float: left
+        &--show
+          // background-image: showimg
 
-      &--delete
-        float: right
+        &--delete
+          // background-image: delimg
+          background-color: #BF848F
 
 .add-item
-  height: 25px
-  margin: 50px 100px
+  display: flex
+
+  &__input
+    height: 25px
+    padding: 0
+    background-color: #595857
+    color: #E9EEF2
+    border: none
 
   &__button
-    width: 45%
+    height: 25px
+    width: 75px
+    background-color: #C4C4C4
+    color: #595857
+    border: none
     cursor: pointer
-    background-color: #DAF0EC
-    border: 2px dashed #40CFBE
-    border:
-      top-left-radius: 2% 50%
-      top-right-radius: 2% 50%
-      bottom-right-radius: 2% 50%
-      bottom-left-radius: 2% 50%
-    color: #40CFBE
-    letter-spacing: 5px
-    transition: background-color .3s
-
-    &:hover
-      background-color: #B8E6DE
-
-    &:last-child
-      float: right
 </style>

@@ -1,14 +1,12 @@
 <template>
   <section class="settings">
     <aside>
-      <button
-       @click=""
-      >
+      <button>
         Modifiers' Styles
       </button>
     </aside>
     <section>
-      <v-user-styles v-if=""></v-user-styles>
+      <v-user-styles></v-user-styles>
     </section>
   </section>
 </template>

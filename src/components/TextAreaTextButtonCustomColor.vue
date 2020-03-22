@@ -1,5 +1,5 @@
 <template>
-<ul class="wrapper">
+<ul class="button-wrapper">
     <li>
         <button
          @click="toggleInput()"
@@ -8,7 +8,7 @@
     </li>
     <li
      v-show="showInput"
-     class="wrapper__item-input"
+     class="button-wrapper__item-input"
     >
         <v-color-palette @changeColor="customInput = $event" />
         <input

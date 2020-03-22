@@ -11,9 +11,9 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    { path: '/', component: mainPage },
-    { path: '/settings', component: settings },
-    { path: '/authorization', component: authorization }
+    { path: '/', component: mainPage, name: 'homePage' },
+    { path: '/settings', component: settings, name: 'settings' },
+    { path: '/authorization', component: authorization, name: 'auth' }
   ]
 })
 
