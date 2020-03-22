@@ -1,18 +1,15 @@
 <template>
-  <section class="setting-styles"></section>
+<section class="setting-profile"></section>
 </template>
 
 <script>
 export default {
   data () {
-    return {
-    }
+    return {}
   }
 }
 </script>
 
 <style lang="sass">
-.setting-styles
-  height: 100vh
 
 </style>

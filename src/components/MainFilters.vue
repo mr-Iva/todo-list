@@ -3,26 +3,39 @@
   <div>
     <transition name="showMenu">
       <section
-       v-if="showFiltersMenu"
+       v-show="showFiltersMenu"
        class="global-filters__menu"
       >
-        <ul
-         v-for="filtersGroup in categorFilters"
-         :key="`filter-${filtersGroup.name}`"
-        >
-          <li>{{ filtersGroup.name }}</li>
-          <li
-           v-for="filter in filtersGroup.filters"
-           :key="filter.name"
+        <div class="filter-wrapper">
+          <section
+           class="favourite-filters"
+           v-for="filtersGroup in categorFilters"
+           :key="`filter-${filtersGroup.name}`"
           >
-            {{ filter.name }}
-          </li>
-        </ul>
-        <div
-         v-for="filter in uncategorFilters"
-         :key="`filter-${filter.name}`"
-        >
-          {{ filter.name }}
+            <p
+             class="favourite-filters__name"
+             @click="filtersGroup.show = !filtersGroup.show"
+            >
+              {{ filtersGroup.name }}
+            </p>
+            <ul
+             class="favourite-filters__list"
+             v-show="filtersGroup.show"
+            >
+              <li
+              v-for="filter in filtersGroup.filters"
+              :key="filter.name"
+              >
+                <label>{{ filter.name }}<input type="checkbox"></label>
+              </li>
+            </ul>
+          </section>
+          <div
+           v-for="filter in uncategorFilters"
+           :key="`filter-${filter.name}`"
+          >
+            <label>{{ filter.name }}<input type="checkbox"></label>
+          </div>
         </div>
       </section>
     </transition>
@@ -55,6 +68,7 @@ export default {
       showFiltersMenu: false,
       categorFilters: [{
         name: 'home',
+        show: false,
         filters: [{
           name: 'everyday'
         }]
@@ -98,8 +112,6 @@ export default {
       })
 
       this.createFilter = false
-
-      // https://ru.vuejs.org/v2/guide/list.html in the bottom of page there is usefull example how can make names for new gruops
     },
     toggleFilter (event) {
       let active = false
@@ -127,10 +139,25 @@ export default {
     height: 100vh
 
 .showMenu-enter-active
-  animation: showMenu 0.5s
+  animation: showMenu 0.25s
 
 .showMenu-leave-active
-  animation: showMenu 0.5s reverse
+  animation: showMenu 0.25s reverse
+
+.filter-wrapper
+  margin: 60px 10px 0 10px
+
+.favourite-filters
+  margin: 10px 10px
+
+  &__name
+    margin: 0
+    cursor: pointer
+
+  &__list
+    list-style: none
+    padding: 10px
+    margin: 0
 
 .global-filters
   position: fixed
@@ -140,10 +167,11 @@ export default {
   &__menu
     width: 250px
     height: 100vh
-    padding: 60px 10px 0 10px
     position: absolute
     display: inline-block
+    overflow: hidden
     background-color: #262626
+    color: #E9EEF2
 
   &__button
     height: 50px

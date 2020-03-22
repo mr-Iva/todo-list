@@ -3,7 +3,7 @@
 <div id="app">
 
   <v-main-navigation v-if="isAuth"></v-main-navigation>
-  <v-main-filters v-if="isAuth"></v-main-filters>
+  <v-main-filters v-show="showFilters"></v-main-filters>
 
   <router-view></router-view>
 
@@ -23,11 +23,16 @@ export default {
   },
   data () {
     return {
+      showFilters: true
       // isAuth: JSON.parse(localStorage.getItem('userData')).token
     }
   },
   computed: mapState(['isAuth']),
   watch: {
+    $route (to) {
+      console.log(to.name)
+      this.showFilters = to.name === 'homePage'
+    },
     isAuth (val) {
       console.log(val)
       if (val) {
